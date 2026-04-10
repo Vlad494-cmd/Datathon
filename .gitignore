@@ -1,0 +1,41 @@
+# ─── Large raw data files (re-downloadable via Data/scripts/) ───────────────
+Data/raw/ev_charging_points_national/electrolineras_spain.xml
+Data/raw/dgt_vehicle_registrations/*.zip
+
+# ─── Manual-download datasets (not scripted, too large for git) ─────────────
+Data/raw/road_routes_spain/*
+!Data/raw/road_routes_spain/.gitkeep
+Data/raw/ev_charging_points_local/*
+!Data/raw/ev_charging_points_local/.gitkeep
+Data/external/grid_capacity_ide_iberdrola/*
+!Data/external/grid_capacity_ide_iberdrola/.gitkeep
+Data/external/grid_capacity_viesgo/*
+!Data/external/grid_capacity_viesgo/.gitkeep
+
+# ─── Generated / intermediate outputs (reproducible from raw data) ───────────
+Data/interim/*
+Data/processed/*
+!Data/interim/.gitkeep
+!Data/processed/.gitkeep
+
+# ─── Python artifacts ────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.ipynb_checkpoints/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ─── Virtual environments ────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ─── OS / editor noise ───────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
