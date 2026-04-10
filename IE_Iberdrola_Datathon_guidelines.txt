@@ -1,0 +1,306 @@
+IE SUSTAINABILITY DATATHON MARCH 2026 - FULL GUIDELINES
+==========================================================
+Event: IE Sustainability Datathon March 2026
+Challenge Title: Intelligent Electric Mobility – Iberdrola
+Subtitle: "Designing Tomorrow's Charging Network"
+Tagline: "Connecting the present with the energy of the future"
+Organizer: IE University (School of Science & Technology + Sustainability)
+Partner: Iberdrola
+
+----------------------------------------------------------
+1. CHALLENGE OVERVIEW
+----------------------------------------------------------
+- Goal: Design a data-driven EV charging network for Spain's interurban road system.
+- Primary task: Propose optimal locations for public-use charging points on interurban routes, minimizing the number of stations while adequately covering EV mobility demand.
+- Secondary task: Identify "friction points" — locations where grid capacity constraints make EV charging deployment unfeasible or risky.
+- Target horizon: 2027 operational scenario (all models and projections must target this year).
+- This is NOT a pure coding challenge. Research, strategy, data sourcing, and business acumen are equally valued.
+
+----------------------------------------------------------
+2. SCOPE OF ANALYSIS
+----------------------------------------------------------
+- Geography: Interurban transport network in Spain ONLY.
+- Eligible road types: autopistas, autovías, carreteras nacionales (as classified by Ministry of Transport dataset).
+- EXCLUDED: Urban road sections (regardless of municipality size). Large urban centers must be excluded from the primary focus.
+- Rationale: Focus on long-distance travel and "range anxiety" — the key bottleneck to mass EV adoption.
+- Model must incorporate BOTH transport geography AND electrical grid capacity. A geographically ideal location is invalid if the local substation cannot support high-power chargers.
+
+----------------------------------------------------------
+3. THREE CORE OBJECTIVES
+----------------------------------------------------------
+
+OBJECTIVE 1 — Charging Network Optimization (PRIMARY)
+- Propose the minimum number of charging stations needed to adequately cover interurban EV mobility demand.
+- "Optimal" = maximizing utilization and driver convenience while minimizing capital expenditure.
+- Variables to consider: average EV autonomy, seasonal traffic fluctuations, major transit corridors, spacing to prevent drivers from being stranded.
+- The network must be economically sparse yet functionally seamless across Spain.
+- Required outputs: Global Network KPIs (File 1) + Proposed Charging Locations (File 2).
+
+OBJECTIVE 2 — Grid Viability Analysis (SECONDARY)
+- Identify areas where electrical grid congestion limits or prevents deployment.
+- Cross mobility data with grid capacity maps from distributors: i-DE (Iberdrola), Endesa, Viesgo.
+- Find "friction points": locations where high charging demand meets low grid hosting capacity.
+- Required output: Geospatial friction point log (File 3).
+
+OBJECTIVE 3 — Strategy and Value Proposition
+- Translate quantitative analysis into an actionable strategic roadmap for Iberdrola.
+- Address trade-offs between user demand, infrastructure costs, and grid limitations.
+- Propose phased deployment approach aligned with EV adoption growth.
+- Required output: Integrated into the Analytical Report and Final Pitch.
+
+----------------------------------------------------------
+4. MANDATORY DATA SOURCES
+----------------------------------------------------------
+
+SOURCE 1 — Road Routes | Ministry of Transport and Sustainable Mobility
+- Purpose: Map primary interurban arteries, traffic flows, structural backbone of proposed network.
+- URL: Road Routes | Ministry of Transport and Sustainable Mobility
+
+SOURCE 2 — EV Charging Points | National Access Point for Traffic and Mobility
+- Purpose: Establish existing charging infrastructure baseline. Identify coverage gaps. Avoid redundancies.
+- URL: Electric vehicle charging points - Datasets | National Access Point for Traffic and Mobility
+
+SOURCE 3 — datos.gob.es GitHub Repository [*** MANDATORY TECHNICAL REQUIREMENT ***]
+- Title: "Route to electrification: Deciphering the growth of electric vehicles in Spain through data analytics"
+- Action required: Teams MUST fork the official GitHub repository. Use Exercise 3 (Open Data) output.
+- The output of this repository (projected EV fleet growth) serves as the FOUNDATIONAL INPUT for all demand models.
+- This fork must be explicitly referenced in BOTH the Google Colab notebook(s) AND the Analytical Report.
+- URL: Route to electrification | datos.gob.es
+
+----------------------------------------------------------
+5. ADDITIONAL / RECOMMENDED DATA SOURCES
+----------------------------------------------------------
+
+ELECTRICAL GRID CAPACITY (cross-reference with transport data):
+
+1. i-DE / Iberdrola — Consumption Capacity Map
+   - Data: Substation-level available capacity (MW) + geographic coordinates.
+   - URL: Consumption capacity map | i-DE - Iberdrola Group
+
+2. Endesa — e-distribución Network Capacity Nodes
+   - Data: Node-level access capacity. Historical access capacity documents in CSV and XLSX format.
+   - URL: Historical access capacity documents
+
+3. Viesgo — Interactive Grid Map (northern Spain)
+   - Data: Substation-level capacity for Viesgo's distribution network.
+   - URL: Interactive grid map | Viesgo Distribución
+
+VEHICLE REGISTRATION DATA:
+4. DGT — Vehicle Registrations in Spain
+   - Purpose: Monthly EV registration trends by province, to geographically weight charging demand forecasts.
+   - Direct download URLs (monthly files):
+     https://www.dgt.es/microdatos/salida/2025/6/vehiculos/matriculaciones/export_mensual_mat_202506.zip
+     https://www.dgt.es/microdatos/salida/2025/7/vehiculos/matriculaciones/export_mensual_mat_202507.zip
+     https://www.dgt.es/microdatos/salida/2025/8/vehiculos/matriculaciones/export_mensual_mat_202508.zip
+     https://www.dgt.es/microdatos/salida/2025/9/vehiculos/matriculaciones/export_mensual_mat_202509.zip
+     https://www.dgt.es/microdatos/salida/2025/10/vehiculos/matriculaciones/export_mensual_mat_202510.zip
+     https://www.dgt.es/microdatos/salida/2025/11/vehiculos/matriculaciones/export_mensual_mat_202511.zip
+
+SUPPLEMENTARY LOCAL DATA:
+5. Electric car charging points | datos.gob.es
+   - Purpose: Local/municipal datasets (e.g., Vigo) to validate national figures and identify unregistered regional chargers.
+   - URL: Electric car charging points | datos.gob.es
+
+NOTE: Innovation in identifying and integrating additional credible data sources will be positively scored. All sources — provided or independently found — MUST be explicitly documented, cited, and referenced in the Analytical Report.
+
+----------------------------------------------------------
+6. HANDLING DATA GAPS & ASSUMPTIONS
+----------------------------------------------------------
+- Incomplete or imperfect data is expected. Teams are encouraged to make informed assumptions.
+- All assumptions MUST be documented in the Analytical Report with the following structure:
+    1. Document Your Logic: Clearly state proxy values or assumptions (e.g., grid capacity classification thresholds).
+    2. Show Your Research: Back assumptions with industry standards, external sources, or technical reports.
+    3. The Expert Perspective: Justify why the assumption makes sense in the context of real infrastructure planning.
+- Evaluation philosophy: Robust, well-justified reasoning under data scarcity is rewarded MORE than a lucky correct number.
+
+----------------------------------------------------------
+7. DELIVERABLES — FULL SPECIFICATION
+----------------------------------------------------------
+
+ALL deliverables must be submitted via the Final Submission Form, clearly indicating the team name.
+VIOLATION OF DELIVERY CRITERIA = DISQUALIFICATION.
+
+--- DELIVERABLE 1: CODE FILES ---
+- Platform: Google Colab (notebooks alternating code cells and explanatory text).
+- Code must be properly commented and clearly organized.
+- ALL cells must be executed. ALL outputs must be FULLY VISIBLE in the notebook.
+- Must include: printed verification of the structure and format of each output file.
+- Must explicitly reference the datos.gob.es GitHub fork.
+- DISQUALIFICATION RISK: Hidden or missing outputs; undocumented assumptions; output files deviating from required format.
+
+--- DELIVERABLE 2: OUTPUT DATASETS (3 CSV FILES) ---
+
+** FILE 1: Global Network KPIs (Summary Scorecard) **
+File name: File 1.csv
+A SINGLE summary row. Fields:
+
+  Field                            | Data Type | How Obtained
+  ---------------------------------|-----------|------------------------------------------------------
+  total_proposed_stations          | Integer   | Row count of File 2.
+  total_existing_stations_baseline | Integer   | Count of interurban stations from National Access Point dataset (autopistas, autovías, carreteras nacionales only).
+  total_friction_points            | Integer   | Row count of File 3.
+  total_ev_projected_2027          | Integer   | Direct output of mandatory datos.gob.es GitHub fork (projected total EV fleet in Spain for 2027).
+
+** FILE 2: Proposed Charging Locations (Objective 1) **
+File name: File 2.csv
+One row per proposed new charging station. Fields:
+
+  Field               | Data Type   | Description
+  --------------------|-------------|-------------------------------------------------------------
+  location_id         | String      | Unique sequential ID (e.g., IBE_001, IBE_002).
+  latitude            | Float       | Decimal degrees, WGS84.
+  longitude           | Float       | Decimal degrees, WGS84.
+  route_segment       | String      | Official road designation per Ministry of Transport (e.g., A-3, AP-7, N-2).
+  n_chargers_proposed | Integer     | Number of charging points at this site. Must be justified in Analytical Report based on projected local demand.
+  grid_status         | Categorical | Grid capacity classification based on distributor data. Accepted values: Sufficient | Moderate | Congested. Teams must define and document their own classification thresholds in the Analytical Report.
+
+** FILE 3: Friction Points (Objective 2) **
+File name: File 3.csv
+Only locations from File 2 where grid_status = Moderate OR Congested. Locations with grid_status = Sufficient MUST NOT appear here. Fields:
+
+  Field                | Data Type   | Description
+  ---------------------|-------------|-------------------------------------------------------------
+  bottleneck_id        | String      | Unique sequential ID (e.g., FRIC_001, FRIC_002).
+  latitude             | Float       | Decimal degrees, WGS84.
+  longitude            | Float       | Decimal degrees, WGS84.
+  route_segment        | String      | Official road designation per Ministry of Transport (e.g., A-3, AP-7, N-2).
+  distributor_network  | String      | Accepted values: i-DE | Endesa | Viesgo.
+  estimated_demand_kw  | Float       | = n_chargers_proposed × 150 kW. (150 kW is FIXED for ALL teams. No other value accepted.)
+  grid_status          | Categorical | Only Moderate or Congested. Sufficient is invalid here.
+
+** MANDATORY STANDARDIZATION RULES: **
+  - Rule 1: grid_status MUST be assigned based on the "Capacidad disponible / Available capacity (MW)" field from the corresponding distributor dataset (i-DE, Endesa, or Viesgo). Teams must identify the nearest substation to each proposed location, define their own classification thresholds, and document BOTH the spatial matching methodology AND the threshold justification in the Analytical Report.
+  - Rule 2: estimated_demand_kw = n_chargers_proposed × 150 kW. This is fixed and non-negotiable.
+  - Rule 3: File 3 only contains Moderate or Congested locations from File 2. Sufficient locations are excluded.
+
+--- DELIVERABLE 3: BI VISUALIZATION (MAP) ---
+- Must geolocate ALL proposed charging stations from File 2.
+- Colour-coded by grid_status: Green = Sufficient | Yellow = Moderate | Red = Congested.
+- Minimum required fields displayed: geolocation, route segment, number of proposed chargers, grid status.
+- Must be a single self-contained file or app.
+- Must open directly — NO software installation, NO proprietary licenses, NO login credentials required.
+- All data must be embedded within the file (cannot rely on external API calls or live internet connection).
+- DISQUALIFICATION: Any submission requiring software installation, login credentials, or active internet connection scores ZERO for this criterion.
+- Additional layers, overlays, filters, or visual enhancements are encouraged and will be positively valued.
+- Accepted format: Any (HTML, PDF, Tableau Public exported, etc.) — as long as accessibility rules are met.
+
+--- DELIVERABLE 4: ANALYTICAL REPORT (EXECUTIVE SUMMARY) ---
+- Length: 3–5 pages.
+- Must detail: analysis methodology, strategic proposals, all restrictions, all assumptions (EV battery range, charging times, grid capacity thresholds), and limitations.
+- Must justify grid_status classification thresholds with supporting evidence.
+- Must properly cite ALL external data sources.
+- Must explicitly reference the datos.gob.es GitHub fork.
+
+--- DELIVERABLE 5: FINAL PRESENTATION (PITCH) ---
+- Maximum duration: 5 minutes.
+- Delivered by finalist teams at the closing event.
+- Must synthesize technical model robustness AND strategic business recommendations for Iberdrola.
+- Format: PPT or PDF.
+
+----------------------------------------------------------
+8. EVALUATION CRITERIA
+----------------------------------------------------------
+
+OVERALL WEIGHTING:
+  Technical Component + BI Visualization  → 50%
+  Analytical Report & Presentation        → 50%
+
+--- TECHNICAL COMPONENT (50%) ---
+
+T1 — Problem Understanding and Assumptions
+  - Clarity in defining the interurban charging network problem.
+  - All assumptions documented (EV autonomy, demand per station, grid thresholds).
+  - Backed by credible references. Logical consistency throughout.
+  - Missing/poorly documented assumptions = PENALIZED.
+
+T2 — Data Exploration and Quality of Sources
+  - Correct use of all 3 mandatory datasets.
+  - Additional independently sourced data rewarded.
+  - Clear justification for dataset choices + acknowledgment of limitations, biases, gaps.
+
+T3 — Methodology: Network Optimization and Grid Viability Analysis
+  - Sound, coherent methodology for Objective 1 (station placement) and Objective 2 (friction points).
+  - Clear reasoning: station spacing relative to EV autonomy, crossing mobility data with grid capacity.
+  - Methodology must be reproducible, traceable, and clearly explained.
+
+T4 — Output Dataset Compliance
+  - Strict compliance with the exact structure and field definitions for all 3 CSV files.
+  - All standardization rules respected (grid_status, 150 kW rule, File 3 scope).
+  - Deviation from required format may result in DISQUALIFICATION.
+
+T5 — Code Quality and Reproducibility
+  - Clean, properly commented code in Google Colab.
+  - All cells executed. All outputs fully visible.
+  - Structure and format of each output file must be printed/verified in the notebook.
+
+B4 — BI Visualization
+  - Colour-coded map showing all proposed stations (Green/Yellow/Red by grid_status).
+  - Must clearly show: geolocation, route segment, charger count, grid status.
+  - Spatial logic must be self-evident from the visualization alone.
+  - No software installation or credentials required — otherwise scores ZERO.
+  - Extra visual layers/enhancements rewarded.
+
+--- ANALYTICAL REPORT & PRESENTATION (50%) ---
+
+B1 — Integration Between Technical and Strategic Analysis
+  - Analytical Report must connect quantitative outputs to strategic conclusions for Iberdrola.
+  - Assumptions, parameters, and sources must link directly to proposed network and friction points.
+
+B2 — Coherence and Feasibility of the Strategic Roadmap
+  - Deployment strategy must be realistic and reflect trade-off understanding.
+  - Limitations and uncertainties must be explicitly acknowledged.
+  - Phased rollout plan must be actionable within the 2027 horizon.
+
+B3 — Strategic Relevance and Business Value for Iberdrola
+  - Meaningful insights extracted and articulated in terms of Iberdrola's investment decisions.
+  - Friction points and proposed stations must translate into a concrete, prioritized deployment strategy.
+
+B5 — Clarity and Persuasiveness of the Presentation
+  - 5-minute pitch: visually coherent, concise, persuasive.
+  - Data-supported narrative connecting the technical model to the business opportunity.
+
+B6 — Formal Compliance and Citation
+  - Strict adherence to submission formats and deadlines.
+  - All data sources properly cited in the Analytical Report.
+  - Non-compliance may result in disqualification.
+
+----------------------------------------------------------
+9. DISQUALIFICATION GROUNDS (FULL LIST)
+----------------------------------------------------------
+- Missing or undocumented assumptions in the model.
+- Output datasets not following required structure or field definitions.
+- grid_status classification thresholds not defined or not justified in the Analytical Report.
+- estimated_demand_kw not calculated using the fixed 150 kW standard.
+- File 3 containing any location classified as Sufficient.
+- Missing or invisible code cell outputs in Google Colab.
+- BI Visualization requiring software installation or login credentials.
+- Failure to submit the Analytical Report or Final Presentation.
+- Not submitting via the Final Submission Form with the team name.
+
+----------------------------------------------------------
+10. TIE-BREAKING CRITERIA (in order)
+----------------------------------------------------------
+1. Integration and coherence of the Analytical Report (B1)
+2. Clarity and persuasiveness of the Final Presentation (B5)
+3. Code quality and reproducibility (T5)
+4. BI Visualization / Map quality (B4)
+5. Accuracy and compliance of the three output datasets (T4)
+
+----------------------------------------------------------
+11. TECHNICAL CONSTANTS AND FIXED VALUES
+----------------------------------------------------------
+- Standard power per charger: 150 kW (fixed for all teams, no exceptions)
+- estimated_demand_kw formula: n_chargers_proposed × 150 kW
+- Target year for all projections: 2027
+- Coordinate system: WGS84 decimal degrees
+- Grid status accepted values: Sufficient | Moderate | Congested
+- Distributor network accepted values: i-DE | Endesa | Viesgo
+- Location ID format example: IBE_001, IBE_002, ...
+- Friction Point ID format example: FRIC_001, FRIC_002, ...
+
+----------------------------------------------------------
+12. OUTPUT FILE NAMING CONVENTION
+----------------------------------------------------------
+- File 1.csv  → Global Network KPIs (1 summary row)
+- File 2.csv  → Proposed Charging Locations (1 row per station)
+- File 3.csv  → Friction Points (subset of File 2 where grid_status != Sufficient)
