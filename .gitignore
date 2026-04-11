@@ -1,6 +1,7 @@
 # ─── Large raw data files (re-downloadable via Data/scripts/) ───────────────
 Data/raw/ev_charging_points_national/electrolineras_spain.xml
 Data/raw/dgt_vehicle_registrations/*.zip
+Data/raw/ev_fleet_projections_datosgob/parquet/
 
 # ─── Manual-download datasets (not scripted, too large for git) ─────────────
 Data/raw/road_routes_spain/*
