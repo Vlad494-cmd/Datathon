@@ -1,0 +1,138 @@
+================================================================================
+WORKAROUND GUIDE: DOWNLOADING DATASETS FROM MINISTRY OF TRANSPORT (MITMA)
+Road Routes | Ministry of Transport and Sustainable Mobility
+================================================================================
+
+CONTEXT
+-------
+The direct download sources for some datasets from the Road Routes portal
+(Ministry of Transport and Sustainable Mobility) are currently under
+MAINTENANCE. However, the data is still accessible by making direct queries
+to the service's REST API.
+
+This guide provides a worked example using the dataset:
+  "Carreteras de la Red de Transporte de Interés General (RTIG)"
+
+NOTE: This is just one example. Students may encounter the same issue with
+other datasets. The same approach (REST API query via Python) can be adapted
+for any affected dataset.
+
+--------------------------------------------------------------------------------
+ABOUT THE DATASET (RTIG - Carreteras)
+--------------------------------------------------------------------------------
+Contains the geometries of different road sections within the General Interest
+Transport Network (RTIG), classified by:
+  - Type of road (toll motorway, free motorway/dual carriageway,
+    multi-lane road, conventional road)
+  - Ownership (titularidad)
+  - Membership in the TEN-T network
+
+The RTIG is defined by roads belonging to the State Road Network (RCE),
+roads included in the TEN-T network, other High Capacity roads, and those
+that enable connections between the above to complete itineraries.
+
+Available fields in the dataset:
+  - id
+  - Carretera
+  - Longitud
+  - PK_inicio
+  - PK_fin
+  - Tipo_de_via
+  - Valido_desde
+  - Valido_hasta
+  - Titular
+  - TENT
+  - TENT_red_basica
+  - TENT_corredor
+
+Total records available: 1602
+
+--------------------------------------------------------------------------------
+STEP-BY-STEP WORKAROUND
+--------------------------------------------------------------------------------
+
+STEP 1 — Access the Preview (Previsualización)
+  - Navigate to the dataset page on the Ministry portal.
+  - Under "Datos y Recursos", find the "[En revisión] JSON" resource.
+  - Click "Explorar" → "Previsualización".
+  - This reveals the underlying REST API URL and query structure.
+
+STEP 2 — Identify the API Query URLs
+  The base REST API endpoint for the RTIG roads dataset is:
+
+    https://mapas.fomento.gob.es/arcgis2/rest/services/Hermes/0_CARRETERAS/MapServer/19/query?where=GEOM is not null&outFields=*&f=json
+
+  Because the API returns records in batches of 500, use pagination via
+  resultOffset and resultRecordCount parameters. Example paginated queries:
+
+    Batch 1 (records 0–499):
+    https://mapas.fomento.gob.es/arcgis2/rest/services/Hermes/0_CARRETERAS/MapServer/19/query?where=id%3E0&outFields=*&resultOffset=0&resultRecordCount=500&f=json
+
+    Batch 2 (records 500–999):
+    https://mapas.fomento.gob.es/arcgis2/rest/services/Hermes/0_CARRETERAS/MapServer/19/query?where=id%3E0&outFields=*&resultOffset=500&resultRecordCount=500&f=json
+
+    Batch 3 (records 1000–1499):
+    https://mapas.fomento.gob.es/arcgis2/rest/services/Hermes/0_CARRETERAS/MapServer/19/query?where=id%3E0&outFields=*&resultOffset=1000&resultRecordCount=500&f=json
+
+    Batch 4 (records 1500–1999):
+    https://mapas.fomento.gob.es/arcgis2/rest/services/Hermes/0_CARRETERAS/MapServer/19/query?where=id%3E0&outFields=*&resultOffset=1500&resultRecordCount=500&f=json
+
+  Pattern: increment resultOffset by 500 each time until no more records
+  are returned.
+
+STEP 3 — Develop a Python Script to Download the Data
+  Write a Python script that:
+    1. Loops through the paginated API queries (incrementing resultOffset by 500).
+    2. Makes HTTP GET requests to each URL.
+    3. Collects all returned records.
+    4. Stops when the last batch returns fewer than 500 records.
+    5. Saves the full dataset to a GeoJSON file (e.g., carreteras_RTIG.geojson).
+
+  Expected output log (confirmed working):
+    Iniciando descarga de carreteras RTIG desde HERMES...
+    Descargando registros 0 a 500...     → Código HTTP: 200 → 500 registros. Total: 500
+    Descargando registros 500 a 1000...  → Código HTTP: 200 → 500 registros. Total: 1000
+    Descargando registros 1000 a 1500... → Código HTTP: 200 → 500 registros. Total: 1500
+    Descargando registros 1500 a 2000... → Código HTTP: 200 → 102 registros. Total: 1602
+    Último lote recibido.
+    Archivo guardado: carreteras_RTIG.geojson
+    Total registros descargados: 1602
+
+STEP 4 — Use the Downloaded Data
+  Once the script completes, the GeoJSON file is ready to be used in your
+  analysis. The file will contain all 1602 records with the full set of
+  available fields listed above.
+
+--------------------------------------------------------------------------------
+SAMPLE RECORDS (from the downloaded dataset)
+--------------------------------------------------------------------------------
+
+  Registro 1:
+    Carretera   : A-66R
+    Tipo de vía : Carretera convencional
+    PK inicio   : 149.43
+    PK fin      : 150.375
+    Longitud    : 1119
+    Válido desde: 1761523200000
+
+  Registro 2:
+    Carretera   : A-66R
+    Tipo de vía : Carretera convencional
+    PK inicio   : 152.34
+    PK fin      : 152.96
+    Longitud    : 916
+    Válido desde: 1761523200000
+
+--------------------------------------------------------------------------------
+KEY TAKEAWAYS
+--------------------------------------------------------------------------------
+  - The portal's direct download is under maintenance; use the REST API instead.
+  - The API endpoint follows ArcGIS REST Services conventions.
+  - Pagination is required: fetch 500 records at a time using resultOffset.
+  - The same approach applies to other datasets on the same portal that may
+    have similar availability issues.
+  - A successful download retrieves ALL available records (1602 for RTIG roads).
+
+================================================================================
+END OF GUIDE
+================================================================================
