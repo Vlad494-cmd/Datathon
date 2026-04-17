@@ -1,0 +1,18 @@
+{
+  "total_ev_projected_2027": 327883,
+  "fleet_baseline_2023": 59552,
+  "projected_registrations_2024_2027": 268331,
+  "logistic_params": {
+    "L": 0.1,
+    "k": 0.6649,
+    "t0": 2024.31
+  },
+  "annual_forecast": {
+    "2024": 43510,
+    "2025": 60595,
+    "2026": 76108,
+    "2027": 88118
+  },
+  "model": "Logistic penetration curve fitted on 2019-2023",
+  "generated_at": "2026-04-17"
+}
