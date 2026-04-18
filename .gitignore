@@ -25,6 +25,10 @@ Data/processed/*
 !Data/interim/grid_endesa_substations.csv
 !Data/processed/m2_baseline.json
 !Data/processed/m3_ev_projection.json
+!Data/processed/ev_charging_ml_dataset.csv
+!Data/processed/ev_charging_ml_dataset_v2.csv
+!Data/processed/ev_charging_segment_ml_dataset.csv
+!Data/processed/feature_matrix.csv
 
 # ─── Python artifacts ────────────────────────────────────────────────────────
 __pycache__/
