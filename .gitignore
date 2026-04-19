@@ -15,24 +15,12 @@ Data/external/grid_capacity_viesgo/*
 
 # ─── Generated / intermediate outputs (reproducible from raw data) ───────────
 Data/interim/*
-Data/processed/*
 !Data/interim/.gitkeep
-!Data/processed/.gitkeep
 # ── Colab-accessible processed outputs (small, committed for re-runnability) ──
 !Data/interim/m2_charging_sites_interurban.csv
 !Data/interim/m2_charging_sites_all.csv
 !Data/interim/m2_road_coverage.csv
 !Data/interim/grid_endesa_substations.csv
-!Data/processed/m2_baseline.json
-!Data/processed/m3_ev_projection.json
-!Data/processed/ev_charging_ml_dataset.csv
-!Data/processed/ev_charging_ml_dataset_v2.csv
-!Data/processed/ev_charging_segment_ml_dataset.csv
-!Data/processed/feature_matrix.csv
-!Data/processed/File_1.csv
-!Data/processed/File_2.csv
-!Data/processed/File_3.csv
-!Data/processed/BI_Visualization.html
 
 # ─── Python artifacts ────────────────────────────────────────────────────────
 __pycache__/
