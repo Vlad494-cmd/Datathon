@@ -29,6 +29,10 @@ Data/processed/*
 !Data/processed/ev_charging_ml_dataset_v2.csv
 !Data/processed/ev_charging_segment_ml_dataset.csv
 !Data/processed/feature_matrix.csv
+!Data/processed/File_1.csv
+!Data/processed/File_2.csv
+!Data/processed/File_3.csv
+!Data/processed/BI_Visualization.html
 
 # ─── Python artifacts ────────────────────────────────────────────────────────
 __pycache__/
