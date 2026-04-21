@@ -99,7 +99,8 @@ All models must target **2027**, use the **datos.gob.es EV fleet projection** (3
 - **AFIR as regulatory floor** (Layer 2): gap-fill is purely additive — no roads removed
 - **Grid congestion at selection stage** (Layer 1b): Endesa KD-tree penalises roads near congested substations
 - **Demand-calibrated charger sizing**: `n_chargers = ceil(daily_sessions / 16)` using 327,883-vehicle 2027 projection — directly tied to the mandatory datos.gob.es output. The 150 kW/charger constant is not arbitrary: AFIR Art. 4 mandates a **minimum 150 kW per charging point** on TEN-T Core interurban corridors, making this value a regulatory floor, not an assumption
-- Produces fewer but more precisely allocated chargers than V3 (479 vs 630) — economically efficient
+- **Seasonal peak adjustment** (Section 8c): multiplier applied post-sizing — AP-* × 1.25, A-* × 1.15, N-*/other × 1.00 — based on DGT IMD summer traffic peaks (network-level average; coastal AP-* corridors drive the uplift; inland AP-* routes carry lower seasonality) and industry range studies (ICCT Europe 2023: ~15–20% real-world BEV range reduction in summer conditions increases charging stop frequency per corridor). Concentrates extra capacity on toll motorways and autovías without retraining the ML model
+- Produces fewer but more precisely allocated chargers than V3 (502 vs 630) — economically efficient
 - MILP extension (Section 15) ready for activation if Iberdrola provides a budget envelope
 - Fully AFIR compliant
 
@@ -166,9 +167,9 @@ MILP (Mixed-Integer Linear Programming) was the optimisation backbone of V1 and 
 | **Granularity** | Road-level | Segment-level | Road-level | Road-level | Road-level |
 | **Roads selected** | 23 | 81 (segments) | 73 | 80 | 80 |
 | **Proposed stations** | 26 | 81 | 91 | 93 | **87** |
-| **Total chargers** | 192 | 422 | 600 | 630 | **479** |
-| **Installed capacity (kW)** | 28,800 | 63,300 | 90,000 | 94,500 | **71,850** |
-| **Charger sizing method** | Fixed rule | MILP (minimise) | Traffic weight | Traffic weight | Demand-based (INE) |
+| **Total chargers** | 192 | 422 | 600 | 630 | **502** |
+| **Installed capacity (kW)** | 28,800 | 63,300 | 90,000 | 94,500 | **75,300** |
+| **Charger sizing method** | Fixed rule | MILP (minimise) | Traffic weight | Traffic weight | Demand-based (INE) + seasonal mult. |
 | **AFIR 60 km spacing** | No (150 km gap) | No (10/20 km thr) | Primary filter | Layer 2 gap-fill | Layer 2 gap-fill |
 | **Grid congestion signal** | None | None | None | None | Layer 1b (Endesa KD-tree) |
 | **Classifier F1** | N/A | 0.833 | 0.967 | 0.967 | **0.967** |
@@ -185,14 +186,14 @@ The datathon explicitly asks teams to minimise stations while covering demand �
 | Challenge criterion | FV response |
 |---|---|
 | **O1 — Minimum stations** | 87 stations (fewer than V2's 91 and V3's 93) via demand concentration |
-| **O1 — Justified charger counts** | INE formula tied to 327,883 EV projection (mandatory datos.gob.es output) |
+| **O1 — Justified charger counts** | INE demand formula (datos.gob.es mandatory output) + Section 8c seasonal peak multiplier (AP-* ×1.25, A-* ×1.15, N-*/other ×1.00) → 502 chargers, 75,300 kW |
 | **O2 — Grid friction points** | 87 friction points (all stations Moderate/Congested); Endesa KD-tree at selection stage |
 | **O3 — Iberdrola investment narrative** | Demand-first ranking = deploy where revenue potential is highest. Iberdrola earns from two streams: **i-DE** (regulated grid connection fees, *retribución regulada* — fixed CNMC return regardless of utilisation) + **Iberdrola Smart Charging** (per-kWh service revenue — utilisation-dependent). Even low-utilisation stations in congested areas earn regulated connection income |
 | **AFIR compliance** | Layer 2 gap-fill guarantees ≤60 km spacing on all selected corridors |
 | **Data gap handling** | i-DE/Viesgo absence documented; "Moderate" default is conservative, not arbitrary |
 | **MILP extension (Sec. 15)** | Activates with budget envelope: maximises demand-weighted chargers with asymmetric grid costs (€15k Moderate / €35k Congested). The 2–3× premium for Congested nodes reflects CNMC *Acceso y Conexión* (RD 1183/2020): connections exceeding local substation capacity require a full grid reinforcement study and shared-cost allocation — a regulatory cost structure, not an estimate |
 
-**The key differentiator vs. other approaches:** FV is the only version where charger counts are directly derived from the mandatory datos.gob.es EV fleet projection (327,883 vehicles, 2027 logistic curve), which is an explicit evaluation requirement. All other approaches use traffic weights or MILP that are decoupled from this mandatory data source. The datos.gob.es projection is the official DGT/MITMA baseline used in PNIEC 2021–2030 reporting — anchoring to it ensures the methodology is consistent with Spain's government-published decarbonisation trajectory.
+**The key differentiator vs. other approaches:** FV is the only version where charger counts are directly derived from the mandatory datos.gob.es EV fleet projection (327,883 vehicles, 2027 logistic curve), which is an explicit evaluation requirement. A post-sizing seasonal multiplier (Section 8c) then adjusts capacity upward on high-peak road types (AP-* and A-*) using DGT IMD summer traffic data — adding 23 chargers and 3,450 kW without retraining the ML model. All other approaches use traffic weights or MILP that are decoupled from this mandatory data source. The datos.gob.es projection is the official DGT/MITMA baseline used in PNIEC 2021–2030 reporting — anchoring to it ensures the methodology is consistent with Spain's government-published decarbonisation trajectory.
 
 **5 consensus roads** validated across all ML approaches (A-21, N-111, N-211, N-623, N-634) represent the highest-confidence investment signals and should anchor the report's strategic narrative. All five are in the **northeastern interior corridor** (Aragón, Navarra, Castilla y León) — the gap between the well-served Mediterranean coast (AP-7) and the French border TEN-T Core entry point. This is the interior TEN-T link with the lowest existing coverage relative to cross-border transit demand, making it both the highest ML-consensus signal and the highest regulatory-urgency corridor.
 
@@ -240,6 +241,7 @@ STEP 4 — notebooks/Modelling/Modelling_FV.ipynb            ← PRIMARY SUBMISS
            Layer 1b Endesa KD-tree grid penalty
            Layer 2 AFIR ≤60 km gap-fill
            Section 8b demand formula charger sizing
+           Section 8c seasonal peak multiplier (AP-* ×1.25, A-* ×1.15, N-*/other ×1.00)
   Writes: Data/processed/File_2_FV.csv   → 87 proposed stations
           Data/processed/File_3_FV.csv   → 87 friction points (all Moderate/Congested)
           Data/processed/File_1_FV.csv   → Global KPIs scorecard (1 row)
@@ -261,7 +263,7 @@ FINAL SUBMISSION
 
 ---
 
-## 7. Final Submission Scorecard (File 1 — FV)
+## 7. Final Submission Scorecard (File 1 — FV, post-Section 8c, executed 2026-04-21)
 
 | KPI | Value |
 |---|---|
@@ -275,14 +277,15 @@ FINAL SUBMISSION
 | Metric | Value |
 |---|---|
 | Unique roads covered | 80 |
-| Total chargers | 479 |
-| Avg chargers per station | 5.5 |
-| Total installed capacity | 71,850 kW |
-| Grid: Moderate stations | 70 (80.5%) |
-| Grid: Congested stations | 17 (19.5%) |
+| Total chargers | **502** |
+| Avg chargers per station | **5.77** |
+| Total installed capacity | **75,300 kW** |
+| Grid: Moderate stations | **82 (94.3%)** |
+| Grid: Congested stations | **5 (5.7%)** |
 | Grid: Sufficient stations | 0 (0%) — all stations are friction points |
 | AFIR ≤60 km compliant | Yes (Layer 2 gap-fill) |
-| Charger sizing basis | INE demand formula (datos.gob.es mandatory output) |
+| Charger sizing basis | INE demand formula (datos.gob.es mandatory output) + Section 8c seasonal multiplier |
+| Seasonal adjustment | AP-* ×1.25 (5 stations, 53 chargers, coastal-corridor driven); A-* ×1.15 (11 stations, 104 chargers); N-*/other ×1.00 (71 stations, 345 chargers). Rationale: DGT IMD network-level summer peak + ICCT Europe 2023 (~15–20% real-world BEV range reduction in summer → higher charging frequency per corridor) |
 
 **5 consensus roads (highest-confidence investment signals):**
 A-21, N-111, N-211, N-623, N-634 — flagged by all three ML approaches (V1, V2, V3/FV).
